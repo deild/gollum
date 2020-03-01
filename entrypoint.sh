@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-echo "gollum - a Gollum webapp on Debian 8 Docker Container"
+echo "gollum - a Gollum webapp on Debian 10 Docker Container"
 
 GROOT="/root/wiki"
 OLDKEY="/root/oldfiles/ssl-cert-snakeoil.key"
@@ -21,7 +21,7 @@ if [ "$#" != "0" ]; then
             exit 1
         fi
         # change to desired timezone
-        echo $TIMEZONE > /etc/timezone
+        echo $TIMEZONE >/etc/timezone
         dpkg-reconfigure -f noninteractive tzdata
     fi
     CMD="$1"
@@ -38,7 +38,7 @@ if [ "$#" != "0" ]; then
         # determine startup type
         if [ -z "$RACK_APP" ]; then
             # start gollum using provided arg's
-        cd $GROOT
+            cd $GROOT
             exec gollum "$@"
             exit
         else
@@ -56,9 +56,9 @@ if [ "$#" != "0" ]; then
         FQDN="$2"
         # check if new key and cert needed
         set +e
-        cmp $OLDKEY $SSLKEY > /dev/null
+        cmp $OLDKEY $SSLKEY >/dev/null
         SAMEKEY=$?
-        cmp $OLDCERT $SSLCERT > /dev/null
+        cmp $OLDCERT $SSLCERT >/dev/null
         SAMECERT=$?
         set -e
         if [[ $SAMEKEY -eq 0 ]] || [[ $SAMECERT -eq 0 ]]; then
@@ -105,7 +105,7 @@ if [ "$#" != "0" ]; then
 fi
 
 echo
-echo "usage: genebarker/gollum [OPTION]"
+echo "usage: deild/gollum [OPTION]"
 echo
 echo "The available OPTIONs are:"
 echo "   --http [GOLLUMOPTION]...       Run Gollum using plain HTTP"
@@ -116,16 +116,16 @@ echo
 echo "To use wiki repository on the host, mount it, i.e.:"
 echo "   $ docker run -d -p 80:80 \\"
 echo "       -v /home/me/wiki:/root/wiki \\"
-echo "       genebarker/gollum --http"
+echo "       deild/gollum --http"
 echo
 echo "To run with strict HTTPS creating new self-signed keys:"
 echo "   $ docker run -d -p 80:80 -p 443:443 \\"
-echo "       genebarker/gollum --hsts mybox.example.com"
+echo "       deild/gollum --hsts mybox.example.com"
 echo
 echo "To run with strict HTTPS using your own keys, mount them, i.e.:"
 echo "   $ docker run -d -p 80:80 -p 443:443 \\"
 echo "       -v /etc/ssl:/etc/ssl \\"
-echo "       genebarker/gollum --hsts mybox.example.com"
+echo "       deild/gollum --hsts mybox.example.com"
 echo
 echo "   (the cert's CN must match the FQDN)"
 echo
@@ -134,16 +134,16 @@ echo "mount it, and set RACK_APP environment variable to its name, i.e.:"
 echo "   $ docker run -d -p 80:80 \\"
 echo "       -v /home/me/wiki:/root/wiki \\"
 echo "       -e RACK_APP=config.ru \\"
-echo "       genebarker/gollum --http"
+echo "       deild/gollum --http"
 echo
 echo "To run using a time zone other than UTC, set the TIMEZONE environment"
 echo "variable to the desired time zone (TZ), i.e.:"
 echo "   $ docker run -d -p 80:80 \\"
 echo "       -e TIMEZONE=America/Los_Angeles \\"
-echo "       genebarker/gollum --http"
+echo "       deild/gollum --http"
 echo
 echo "To bypass script, just enter desired command, i.e.:"
-echo "   $ docker run -it genebarker/gollum bash"
+echo "   $ docker run -it deild/gollum bash"
 echo
 echo "Key paths in the container:"
 echo "   /root/wiki     - Wiki content (a git repository)"
